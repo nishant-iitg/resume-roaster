@@ -1,32 +1,170 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
   <title>Resume Roaster 🔥</title>
   <script src="style.js" defer></script>
   <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #ff6b6b;
+      --secondary: #4ecdc4;
+      --background: #f8f9fa;
+      --text-primary: #2d3748;
+      --text-secondary: #718096;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--background) 0%, #e2e8f0 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .loading {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .file-input {
+      border: 2px dashed var(--text-secondary);
+      border-radius: 12px;
+      padding: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .file-input:hover {
+      border-color: var(--primary);
+      background: rgba(255, 107, 107, 0.05);
+    }
+
+    .alert-error {
+      border: 2px solid var(--text-secondary);
+      background: rgba(255, 107, 107, 0.1);
+      border-radius: 12px;
+    }
+
+    .alert-error svg {
+      color: var(--primary);
+    }
+
+    .roast-container {
+      background: rgba(255, 107, 107, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-align: center;
+      margin-bottom: 2rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
-  <div class="container mx-auto p-4 max-w-md">
-    <h1 class="text-4xl font-bold my-8">Resume Roaster</h1>
+  <div class="container">
+    <h1>Resume Roaster</h1>
     
-    <div class="card bg-base-200 p-6">
-      <input type="file" id="resumeUpload" class="file-input w-full" />
-      <button id="roastBtn" class="btn btn-primary mt-4">Roast Me!</button>
+    <div class="card p-6">
+      <div class="text-center mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-2">
+          Upload your resume
+        </label>
+        <input type="file" id="resumeUpload" class="file-input w-full" accept=".pdf,.docx,.txt" />
+      </div>
+      <button id="roastBtn" class="btn btn-primary w-full py-3 text-lg font-semibold">
+        <span id="btnText">Roast Me!</span>
+        <span id="spinner" class="loading hidden ml-2"></span>
+      </button>
     </div>
 
     <div id="result" class="mt-8 hidden">
-      <div class="card bg-base-100 p-6">
-        <h2 class="text-xl font-bold">Your Roast:</h2>
-        <p id="roastText" class="my-4"></p>
-        <button id="shareBtn" class="btn btn-outline">Share Roast</button>
+      <div class="card p-6">
+        <h2>Your Roast:</h2>
+        <div id="roastContainer" class="roast-container">
+          <p id="roastText"></p>
+        </div>
+        <button id="shareBtn" class="btn btn-outline w-full mt-4 py-3 text-lg font-semibold">
+          Share Roast
+        </button>
       </div>
-      
-      <div class="mt-6 text-center">
-        <p class="text-sm">Want a detailed rewrite?</p>
-        <button id="premiumBtn" class="btn btn-success mt-2">Get Premium ($5)</button>
+    </div>
+
+    <div id="errorAlert" class="alert alert-error mt-4 hidden">
+      <div class="flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span id="errorText"></span>
       </div>
     </div>
   </div>
 </body>
-</html> 
+</html>

@@ -1,33 +1,75 @@
-// style.js
-document.getElementById('roastBtn').addEventListener('click', async () => {
-  const file = document.getElementById('resumeUpload').files[0];
-  if (!file) return alert('Upload a resume first!');
-
-  const text = await file.text();
+document.addEventListener('DOMContentLoaded', () => {
   const roastBtn = document.getElementById('roastBtn');
-  roastBtn.innerHTML = 'Roasting...';
-  roastBtn.disabled = true;
+  const btnText = document.getElementById('btnText');
+  const spinner = document.getElementById('spinner');
+  const resultDiv = document.getElementById('result');
+  const errorAlert = document.getElementById('errorAlert');
 
-  try {
-    const response = await fetch('/.netlify/functions/roast', {
-      method: 'POST',
-      body: JSON.stringify({ text: text.substring(0, 2000) })  // Limit input
-    });
-    const { roast } = await response.json();
-    
-    document.getElementById('roastText').innerText = roast;
-    document.getElementById('result').classList.remove('hidden');
-  } catch (error) {
-    alert('Roast failed! Try again later.');
-  } finally {
-    roastBtn.innerHTML = 'Roast Me!';
-    roastBtn.disabled = false;
-  }
+  roastBtn.addEventListener('click', async () => {
+    const file = document.getElementById('resumeUpload').files[0];
+    if (!file) {
+      showError('Please upload a resume first!');
+      return;
+    }
+
+    // Show loading state
+    btnText.textContent = 'Roasting...';
+    spinner.classList.remove('hidden');
+    roastBtn.disabled = true;
+    errorAlert.classList.add('hidden');
+
+    try {
+      const text = await readFileAsText(file);
+      const response = await fetchRoast(text);
+      
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      document.getElementById('roastText').textContent = response.roast;
+      resultDiv.classList.remove('hidden');
+    } catch (error) {
+      showError(error.message || 'Failed to generate roast. Try again later.');
+    } finally {
+      btnText.textContent = 'Roast Me!';
+      spinner.classList.add('hidden');
+      roastBtn.disabled = false;
+    }
+  });
+
+  document.getElementById('shareBtn').addEventListener('click', () => {
+    const roast = document.getElementById('roastText').textContent;
+    navigator.clipboard.writeText(`My resume roast:\n\n${roast}\n\nTry yours: ${window.location.href}`)
+      .then(() => alert('Roast copied! Share it anywhere.'))
+      .catch(() => showError('Failed to copy to clipboard'));
+  });
 });
 
-// Share button
-document.getElementById('shareBtn').addEventListener('click', () => {
-  const roast = document.getElementById('roastText').innerText;
-  navigator.clipboard.writeText(`My resume roast:\n\n${roast}\n\nTry yours: [YOUR_SITE_URL]`);
-  alert('Copied to clipboard! Share it on Twitter/LinkedIn');
-}); 
+// Helper functions
+async function readFileAsText(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsText(file);
+  });
+}
+
+async function fetchRoast(text) {
+  const response = await fetch('/.netlify/functions/roast', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: text.substring(0, 2000) })
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return await response.json();
+}
+
+function showError(message) {
+  document.getElementById('errorText').textContent = message;
+  errorAlert.classList.remove('hidden');
+}
