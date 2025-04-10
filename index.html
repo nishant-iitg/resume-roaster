@@ -4,7 +4,7 @@
   <title>Resume Roaster 🔥</title>
   <script src="style.js" defer></script>
   <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --primary: #ff6b6b;
@@ -12,34 +12,107 @@
       --background: #f8f9fa;
       --text-primary: #2d3748;
       --text-secondary: #718096;
+      --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
 
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, var(--background) 0%, #e2e8f0 100%);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .container {
+      flex: 1;
       max-width: 600px;
       margin: 0 auto;
       padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .header h1 {
+      font-size: 3.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
     }
 
     .card {
+      width: 100%;
       background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 16px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.3s ease;
+      overflow: hidden;
     }
 
     .card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    .card-content {
+      padding: 2rem;
+    }
+
+    .file-input {
+      border: 2px dashed var(--text-secondary);
+      border-radius: 12px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .file-input:hover {
+      border-color: var(--primary);
+      background: rgba(255, 107, 107, 0.05);
+    }
+
+    .file-input::before {
+      content: 'Drag & drop your resume here or click to browse';
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     }
 
     .loading {
-      display: inline-block;
       width: 24px;
       height: 24px;
       border: 3px solid rgba(255,255,255,.3);
@@ -52,20 +125,50 @@
       to { transform: rotate(360deg); }
     }
 
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      border: none;
-      transition: transform 0.3s ease;
+    .result-card {
+      margin-top: 2rem;
     }
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
+    .roast-container {
+      background: rgba(255, 107, 107, 0.05);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .roast-container h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .roast-container ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .roast-container ul li {
+      margin-bottom: 0.75rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .roast-container ul li::before {
+      content: '•';
+      color: var(--primary);
+      position: absolute;
+      left: 0;
     }
 
     .btn-outline {
+      width: 100%;
+      padding: 1rem;
+      font-size: 1.1rem;
+      font-weight: 600;
       border: 2px solid var(--primary);
       color: var(--primary);
+      background: transparent;
+      border-radius: 12px;
       transition: all 0.3s ease;
     }
 
@@ -75,95 +178,65 @@
       transform: translateY(-2px);
     }
 
-    .file-input {
-      border: 2px dashed var(--text-secondary);
-      border-radius: 12px;
-      padding: 1rem;
-      transition: all 0.3s ease;
-    }
-
-    .file-input:hover {
-      border-color: var(--primary);
-      background: rgba(255, 107, 107, 0.05);
-    }
-
     .alert-error {
       border: 2px solid var(--text-secondary);
       background: rgba(255, 107, 107, 0.1);
       border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .alert-error svg {
       color: var(--primary);
+      width: 20px;
+      height: 20px;
     }
 
-    .roast-container {
-      background: rgba(255, 107, 107, 0.05);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin: 1rem 0;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      text-align: center;
-      margin-bottom: 2rem;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 1rem;
-    }
-
-    p {
-      color: var(--text-secondary);
-      line-height: 1.6;
+    .error-text {
+      color: var(--primary);
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Resume Roaster</h1>
-    
-    <div class="card p-6">
-      <div class="text-center mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-2">
-          Upload your resume
-        </label>
-        <input type="file" id="resumeUpload" class="file-input w-full" accept=".pdf,.docx,.txt" />
-      </div>
-      <button id="roastBtn" class="btn btn-primary w-full py-3 text-lg font-semibold">
-        <span id="btnText">Roast Me!</span>
-        <span id="spinner" class="loading hidden ml-2"></span>
-      </button>
+    <div class="header">
+      <h1>Resume Roaster</h1>
+      <p>Get professional feedback on your resume instantly</p>
     </div>
 
-    <div id="result" class="mt-8 hidden">
-      <div class="card p-6">
-        <h2>Your Roast:</h2>
-        <div id="roastContainer" class="roast-container">
-          <p id="roastText"></p>
+    <div class="card">
+      <div class="card-content">
+        <div class="file-input">
+          <input type="file" id="resumeUpload" class="w-full" accept=".pdf,.docx,.txt" />
         </div>
-        <button id="shareBtn" class="btn btn-outline w-full mt-4 py-3 text-lg font-semibold">
-          Share Roast
+        <button id="roastBtn" class="btn-primary">
+          <span id="btnText">Roast Me!</span>
+          <span id="spinner" class="loading hidden"></span>
         </button>
       </div>
     </div>
 
-    <div id="errorAlert" class="alert alert-error mt-4 hidden">
-      <div class="flex items-center">
-        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <span id="errorText"></span>
+    <div id="result" class="result-card hidden">
+      <div class="card">
+        <div class="card-content">
+          <h2>Your Roast:</h2>
+          <div id="roastContainer" class="roast-container">
+            <p id="roastText"></p>
+          </div>
+          <button id="shareBtn" class="btn-outline">Share Roast</button>
+        </div>
       </div>
+    </div>
+
+    <div id="errorAlert" class="alert-error hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      <span id="errorText" class="error-text"></span>
     </div>
   </div>
 </body>
