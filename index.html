@@ -4,47 +4,40 @@
   <title>Resume Roaster 🔥</title>
   <script src="style.js" defer></script>
   <link href="https://cdn.jsdelivr.net/npm/daisyui@3.9.4/dist/full.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #ff6b6b;
-      --secondary: #4ecdc4;
-      --background: #f8f9fa;
-      --text-primary: #2d3748;
-      --text-secondary: #718096;
-      --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --primary: #000000;
+      --secondary: #666666;
+      --background: #ffffff;
+      --text-primary: #000000;
+      --text-secondary: #666666;
+      --border-color: #e5e5ea;
     }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, var(--background) 0%, #e2e8f0 100%);
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--background);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      color: var(--text-primary);
+      line-height: 1.5;
     }
 
     .container {
-      flex: 1;
-      max-width: 600px;
+      max-width: 800px;
       margin: 0 auto;
       padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
     }
 
     .header h1 {
-      font-size: 3.5rem;
+      font-size: 2.5rem;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       margin-bottom: 0.5rem;
+      color: var(--text-primary);
     }
 
     .header p {
@@ -53,35 +46,25 @@
     }
 
     .card {
-      width: 100%;
       background: white;
-      border-radius: 16px;
-      box-shadow: var(--card-shadow);
-      transition: all 0.3s ease;
-      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
     }
 
     .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    }
-
-    .card-content {
-      padding: 2rem;
+      box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.1), 0 2px 2px -2px rgb(0 0 0 / 0.1);
     }
 
     .file-input {
-      border: 2px dashed var(--text-secondary);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 1.5rem;
-      transition: all 0.3s ease;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .file-input:hover {
-      border-color: var(--primary);
-      background: rgba(255, 107, 107, 0.05);
+      transition: all 0.2s ease;
+      margin-bottom: 1rem;
+      position: relative;
+      cursor: pointer;
     }
 
     .file-input::before {
@@ -89,35 +72,101 @@
       display: block;
       color: var(--text-secondary);
       font-size: 0.9rem;
+      cursor: pointer;
     }
 
-    .btn-primary {
+    .file-input:hover {
+      border-color: var(--primary);
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .file-input input[type="file"] {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0;
       width: 100%;
-      padding: 1rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      border: none;
-      border-radius: 12px;
-      transition: all 0.3s ease;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .file-icon {
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      color: white;
+    }
+
+    .file-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .file-preview {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      margin-top: 1rem;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .file-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      background: #1a1a1a;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      border-radius: 12px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      background: rgba(0, 0, 0, 0.02);
     }
 
     .loading {
-      width: 24px;
-      height: 24px;
+      display: inline-block;
+      width: 20px;
+      height: 20px;
       border: 3px solid rgba(255,255,255,.3);
       border-radius: 50%;
-      border-top-color: var(--primary);
+      border-top-color: white;
       animation: spin 1s ease-in-out infinite;
     }
 
@@ -125,20 +174,16 @@
       to { transform: rotate(360deg); }
     }
 
-    .result-card {
-      margin-top: 2rem;
-    }
-
     .roast-container {
-      background: rgba(255, 107, 107, 0.05);
       border-radius: 12px;
       padding: 1.5rem;
-      margin: 1.5rem 0;
+      margin: 1rem 0;
+      background: rgba(0, 0, 0, 0.02);
     }
 
     .roast-container h3 {
       color: var(--primary);
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       margin-bottom: 0.5rem;
     }
 
@@ -160,43 +205,25 @@
       left: 0;
     }
 
-    .btn-outline {
-      width: 100%;
-      padding: 1rem;
-      font-size: 1.1rem;
-      font-weight: 600;
-      border: 2px solid var(--primary);
-      color: var(--primary);
-      background: transparent;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-    }
-
-    .btn-outline:hover {
-      background: var(--primary);
-      color: white;
-      transform: translateY(-2px);
-    }
-
     .alert-error {
-      border: 2px solid var(--text-secondary);
-      background: rgba(255, 107, 107, 0.1);
+      border: 1px solid var(--border-color);
       border-radius: 12px;
       padding: 1rem;
       margin-top: 1rem;
+      background: rgba(255, 0, 0, 0.02);
+      color: #ff0000;
       display: flex;
       align-items: center;
       gap: 0.75rem;
     }
 
     .alert-error svg {
-      color: var(--primary);
-      width: 20px;
-      height: 20px;
+      color: #ff0000;
+      width: 1.25rem;
+      height: 1.25rem;
     }
 
     .error-text {
-      color: var(--primary);
       font-weight: 500;
     }
   </style>
@@ -208,33 +235,47 @@
       <p>Get professional feedback on your resume instantly</p>
     </div>
 
-    <div class="card">
-      <div class="card-content">
+    <div class="card p-6">
+      <div class="text-center mb-4">
         <div class="file-input">
           <input type="file" id="resumeUpload" class="w-full" accept=".pdf,.docx,.txt" />
+          <div id="fileInfo" class="file-info hidden">
+            <div class="file-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <div>
+              <span id="fileName" class="file-name">No file selected</span>
+              <span id="fileSize" class="text-sm text-gray-500">0 KB</span>
+            </div>
+          </div>
+          <div id="filePreview" class="file-preview hidden">
+            <div class="text-gray-500">Preview will appear here for PDF files</div>
+          </div>
         </div>
-        <button id="roastBtn" class="btn-primary">
-          <span id="btnText">Roast Me!</span>
-          <span id="spinner" class="loading hidden"></span>
-        </button>
       </div>
+      <button id="roastBtn" class="btn-primary w-full">
+        <span id="btnText">Roast Me!</span>
+        <span id="spinner" class="loading hidden ml-2"></span>
+      </button>
     </div>
 
-    <div id="result" class="result-card hidden">
-      <div class="card">
-        <div class="card-content">
-          <h2>Your Roast:</h2>
-          <div id="roastContainer" class="roast-container">
-            <p id="roastText"></p>
-          </div>
-          <button id="shareBtn" class="btn-outline">Share Roast</button>
+    <div id="result" class="mt-8 hidden">
+      <div class="card p-6">
+        <h2>Your Roast:</h2>
+        <div id="roastContainer" class="roast-container">
+          <p id="roastText"></p>
         </div>
+        <button id="shareBtn" class="btn-outline w-full mt-4">
+          Share Roast
+        </button>
       </div>
     </div>
 
     <div id="errorAlert" class="alert-error hidden">
       <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current" fill="none" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
       <span id="errorText" class="error-text"></span>
     </div>
