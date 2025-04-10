@@ -4,36 +4,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const spinner = document.getElementById('spinner');
   const resultDiv = document.getElementById('result');
   const errorAlert = document.getElementById('errorAlert');
-  const fileInfo = document.getElementById('fileInfo');
   const fileName = document.getElementById('fileName');
-  const fileSize = document.getElementById('fileSize');
-  const filePreview = document.getElementById('filePreview');
+  const fileInput = document.querySelector('.file-input');
 
   // File input handling
   const resumeUpload = document.getElementById('resumeUpload');
   resumeUpload.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Update file info
-      fileInfo.classList.remove('hidden');
+      fileInput.classList.add('has-file');
       fileName.textContent = file.name;
-      fileSize.textContent = `${(file.size / 1024).toFixed(1)} KB`;
-
-      // Handle PDF preview
-      if (file.type === 'application/pdf') {
-        filePreview.classList.remove('hidden');
-        filePreview.innerHTML = `
-          <iframe src="${URL.createObjectURL(file)}#view=FitH" frameborder="0"></iframe>
-        `;
-      } else {
-        filePreview.classList.add('hidden');
-      }
     } else {
-      // Reset file info
-      fileInfo.classList.add('hidden');
+      fileInput.classList.remove('has-file');
       fileName.textContent = 'No file selected';
-      fileSize.textContent = '0 KB';
-      filePreview.classList.add('hidden');
     }
   });
 

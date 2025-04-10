@@ -65,6 +65,9 @@
       margin-bottom: 1rem;
       position: relative;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .file-input::before {
@@ -73,11 +76,26 @@
       color: var(--text-secondary);
       font-size: 0.9rem;
       cursor: pointer;
+      transition: opacity 0.2s ease;
     }
 
-    .file-input:hover {
-      border-color: var(--primary);
+    .file-input.has-file::before {
+      opacity: 0;
+    }
+
+    .file-input.has-file {
       background: rgba(0, 0, 0, 0.02);
+    }
+
+    .file-input.has-file .file-name {
+      opacity: 1;
+    }
+
+    .file-name {
+      font-weight: 500;
+      color: var(--text-primary);
+      opacity: 0;
+      transition: opacity 0.2s ease;
     }
 
     .file-input input[type="file"] {
@@ -110,9 +128,9 @@
       color: white;
     }
 
-    .file-name {
-      font-weight: 500;
-      color: var(--text-primary);
+    .file-type {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
     }
 
     .file-preview {
@@ -124,12 +142,43 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .file-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .file-preview iframe {
       width: 100%;
       height: 100%;
       border: none;
+    }
+
+    .file-preview .preview-text {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .file-preview .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    .file-preview .error {
+      color: #ff0000;
+      font-size: 0.9rem;
     }
 
     .btn-primary {
@@ -239,20 +288,7 @@
       <div class="text-center mb-4">
         <div class="file-input">
           <input type="file" id="resumeUpload" class="w-full" accept=".pdf,.docx,.txt" />
-          <div id="fileInfo" class="file-info hidden">
-            <div class="file-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-              </svg>
-            </div>
-            <div>
-              <span id="fileName" class="file-name">No file selected</span>
-              <span id="fileSize" class="text-sm text-gray-500">0 KB</span>
-            </div>
-          </div>
-          <div id="filePreview" class="file-preview hidden">
-            <div class="text-gray-500">Preview will appear here for PDF files</div>
-          </div>
+          <span id="fileName" class="file-name">No file selected</span>
         </div>
       </div>
       <button id="roastBtn" class="btn-primary w-full">
