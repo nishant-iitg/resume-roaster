@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function fetchRoast(text) {
-    const response = await fetch('/.netlify/functions/roast', {
+    const response = await fetch('/api/roast', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: text.substring(0, 2000) })

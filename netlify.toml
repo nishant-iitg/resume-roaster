@@ -1,6 +1,7 @@
 [build]
+  command = "npm run build"
+  publish = "dist"
   functions = "netlify/functions"
-  publish = "."
 
 [[headers]]
   for = "/*"
@@ -9,7 +10,23 @@
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
 
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type"
+
 [[redirects]]
   from = "/functions/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["openai"]
